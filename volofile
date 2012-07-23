@@ -99,6 +99,28 @@ module.exports = {
                     return buildOutput;
                 })
                 .then(function (buildOutput) {
+                    var indexName = buildDir + '/index.html',
+                        contents = v.read(indexName),
+                        cssContent = v.read(buildDir + '/css/app.css'),
+                        jsContent = v.read(buildDir + '/js/app.js'),
+                        jsRegexp = /(<script[^>]+data-main="[^"]+"[^>]+src="[^"]+"[^>]+>\s*<\/script>)/,
+                        cssRegexp = /<link.*rel="stylesheet">/;
+                    contents = contents.replace(jsRegexp, function(match) {
+                        console.log(match);
+                        return '<script type="text/javascript">' + jsContent + '</script>';
+                    });
+
+                    contents = contents.replace(cssRegexp, function(match) {
+                        console.log(match);
+                        return '<style type="text/css">' + cssContent + '</style>';
+                    });
+
+                    v.write(indexName, contents);
+                    v.rm(buildDir + '/css');
+                    v.rm(buildDir + '/js');
+
+                })
+                .then(function (buildOutput) {
                     d.resolve(buildOutput);
                 }, d.reject);
         }
