@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+
+                <a class="brand" href="#">Latenza.js</a>
+
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <button class="webapp-install btn btn-primary"
+                                style="display: none;">Install</button>
+                   </li>
+                </ul>
+             </div>
+        </div>
+    </div>
+
+    <div class="container demo">
+        <h1>Latenza.js</h1>
+        <p>
+        Latenz.js is a boilerplate for building web applications that
+        use a high latency network and are driven by a RESTful backend.
+        </p>
+
+        <div>
+            <div style="display: none;" class="webapp-error alert alert-block">
+                <a class="close" data-dismiss="alert">×</a>
+                <h4 class="alert-heading">Install error</h4>
+                <span class="webapp-error-details"></span>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="span4">
+                <h2>Network Status</h2>
+                <p>
+                    <span class="networkStatus label"></span>
+                    <span class="latencyStatus label"></span>
+                </p>
+            </div>
+
+            <div class="span4">
+                <h2>AppCache Status</h2>
+
+                <p>
+                    <span class="appCacheStatus label">n/a</span>
+                </p>
+
+                <p>
+                    <div class="updateAlert well" style="display: none;">
+                        <p>There is an application update. Update now?</p>
+                        <button class="updateButton btn btn-primary">Update</button>
+                    </div>
+                </p>
+
+                <p>
+                    <button class="checkUpdate btn btn-primary"
+                            style="display: none;">Check for Update</button>
+                </p>
+
+                <div class="eventSection" style="display: none;">
+                    <p>appCache events fired (most recent first):</p>
+                    <div class="appCacheEvent"></div>
+                </div>
+            </div>
+
+            <div class="span4">
+                <h2>Sample JavaScript</h2>
+                <p>The button below will use the modal JS component.</p>
+
+                <!-- sample modal content -->
+                <div id="myModal" class="modal hide fade">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal" >&times;</a>
+                        <h3>Modal Heading</h3>
+                    </div>
+                    <div class="modal-body">
+                        <h4>Text in a modal</h4>
+                        <p>This is text in a modal.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <a href="#" class="btn btn-primary">Save changes</a>
+
+                        <a href="#" class="btn" data-dismiss="modal" >Close</a>
+                    </div>
+                </div>
+                <a class="btn btn-primary btn-large" href="#myModal"
+                   data-toggle="modal">Launch demo modal</a>
+            </div>
+        </div>
+    </div>
+    <!-- Load the main app module via the module loader -->
+    <script async data-main="js/app" src="js/lib/require.js" charset="utf-8"></script>
+</body>
+</html>
