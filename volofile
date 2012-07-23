@@ -106,12 +106,10 @@ module.exports = {
                         jsRegexp = /(<script[^>]+data-main="[^"]+"[^>]+src="[^"]+"[^>]+>\s*<\/script>)/,
                         cssRegexp = /<link.*rel="stylesheet">/;
                     contents = contents.replace(jsRegexp, function(match) {
-                        console.log(match);
                         return '<script type="text/javascript">' + jsContent + '</script>';
                     });
 
                     contents = contents.replace(cssRegexp, function(match) {
-                        console.log(match);
                         return '<style type="text/css">' + cssContent + '</style>';
                     });
 

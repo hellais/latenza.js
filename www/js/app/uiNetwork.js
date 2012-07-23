@@ -16,6 +16,7 @@ define(function (require) {
         // Use the body element if no parentDom provided
         parentDom = parentDom || $('body');
 
+        var latenzaBox = parentDom.find('.latenzaStatusBox');
         var networkDom = parentDom.find('.networkStatus');
         var latencyDom = parentDom.find('.latencyStatus');
 
@@ -51,6 +52,12 @@ define(function (require) {
         });
         network.on('offline', function () {
             updateNetworkDisplay(false);
+        });
+
+        latenzaBox.hover(function() {
+            $(this).stop(true).fadeTo("fast", '1');
+        }, function() {
+            $(this).delay(800).fadeTo("slow", '0.1');
         });
 
     };
