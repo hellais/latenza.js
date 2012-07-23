@@ -16,6 +16,16 @@ define(function() {
             return window.addEventListener(state, func, false);
         },
 
+        //
+        // This function returns the latency of the network connection by
+        // loading small images from remote hosts.
+        //
+        // `callback` a function to be called once the measurement has
+        //            concluded
+        // `measurement_count` int, how many measurements should be done for
+        //                     every host.
+        // `testUrls` Array(), contains the addresses of the images to be used
+        //                     for testing latency.
         getLatency: function(callback, measurements_count, testUrls) {
             console.log("foobar");
             if(typeof(measurements_count) == 'undefined') measurements_count = 2;
@@ -48,6 +58,7 @@ define(function() {
                     var idx = measurements.length;
                     var ts, rtt, img = new Image;
                     var imageLoaded = function(idx) {
+                        // Closures rock! Don't they? :)
                         return function(e) {
                             measurements[idx].rtt = (+new Date - measurements[idx].startTime);
                             measure(ltz);
@@ -55,18 +66,7 @@ define(function() {
                     };
                     img.onload = imageLoaded(idx);
 
-                    /*
-                    img.onload = function(e) {
-                            console.log("foobar");
-                            console.log(e);
-                            console.log("Doing idx: "+idx);
-                            measurements[idx].rtt = (+new Date - measurements[idx].startTime);
-                            console.log("completed measurement!");
-                            console.log(measurements);
-                            measure();
-                    }
-                    */
-
+                    // Add a random nonce to bypass browser caching.
                     var testImg = testUrl + '?' + Math.random();
                     measurements[idx] = {};
                     measurements[idx].startTime = +new Date;
