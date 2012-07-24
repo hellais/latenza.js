@@ -7,16 +7,16 @@ define('latenza', ['jquery', 'hogan'], function($, hogan) {
 
         test: function(idx) {
               if (idx == 1) {
-                  this.ajax('http://google.com/');
+                  this.ajax('http://google.com/'+Math.random());
               }
               else if (idx == 2) {
                   for (var x = 0;x<100;x++) {
-                      this.ajax('http://enable-cors.org/');
+                      this.ajax('http://enable-cors.org/?'+Math.random());
                   }
               } else if (idx == 3) {
                   for (var x = 0;x<50;x++) {
-                      this.ajax('http://google.com/');
-                      this.ajax('http://enable-cors.org/');
+                      this.ajax('http://google.com/?'+Math.random());
+                      this.ajax('http://enable-cors.org/?'+Math.random());
                   }
               }
         },
