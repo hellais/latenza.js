@@ -57,7 +57,7 @@ define(function (require) {
         latenzaBox.hover(function() {
             $(this).stop(true).fadeTo("fast", '1');
         }, function() {
-            $(this).delay(800).fadeTo("slow", '0.1');
+            $(this).delay(800).fadeTo("slow", '0.4');
         });
 
     };
