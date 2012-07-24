@@ -1,6 +1,6 @@
 var latenza = {};
 
-define('latenza', ['jquery', 'hogan'], function($, hogan) {
+define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan, crossroads, marked) {
     'use strict';
 
     latenza = {
@@ -29,6 +29,58 @@ define('latenza', ['jquery', 'hogan'], function($, hogan) {
 
         on: function(state, func) {
             return window.addEventListener(state, func, false);
+        },
+
+
+        setMenu: function(menu) {
+            var menu = '';
+            var template = '<li><a href="{{link}}">{{text}}</a></li>\n';
+            var compiled = hogan.compile(template);
+            for (var item in menu) {
+                menu += compiled.render({link: menu[item], text: item});
+            }
+            return menu;
+        },
+
+        readSpecialContent: function(content) {
+            return '<button class="btn">Foobar</button>';
+        },
+
+        readLatenza: function(content) {
+            var parsedContent = JSON.parse(content);
+            var latenzaSite = {};
+
+            if (parsedContent.title) {
+                this.title = parsedContent.title;
+            }
+
+            if (parsedContent.menu) {
+                this.setMenu(parsedContent.menu);
+            }
+
+            if (parsedContent.home) {
+                var homeContent = '';
+                for (var i in parsedContent.home) {
+                    var data = "";
+                    if (typeof(parsedContent.home[i]) == 'object') {
+                       data = this.readSpecialContent(parsedContent.home[i]);
+                    } else {
+                       data = marked(parsedContent.home[i]);
+                    }
+                    homeContent += data;
+                }
+                this.homeContent = homeContent;
+            }
+
+        },
+
+        openSite: function(url) {
+            var successCb = (function(ltz) {
+                                return function(data){ltz.readLatenza(data);};
+                            });
+            this.ajax({url: url+'/latenza/',
+                       success: successCb(this),
+                      });
         },
 
         //
@@ -176,7 +228,27 @@ define('latenza', ['jquery', 'hogan'], function($, hogan) {
             // Bits of code taken from jQuery.
             if ( typeof url === "object" ) {
                 options = url;
-                url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );;
+                url = null;
+                var s = jQuery.ajaxSetup({}, options),
+                    rhash = /#.*$/,
+                    rprotocol = /^\/\//,
+                    rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/,
+                    ajaxLocParts,
+                    ajaxLocation;
+
+                try {
+                    ajaxLocation = location.href;
+                } catch( e ) {
+                    // Use the href attribute of an A element
+                    // since IE will modify it given document.location
+                    ajaxLocation = document.createElement( "a" );
+                    ajaxLocation.href = "";
+                    ajaxLocation = ajaxLocation.href;
+                }
+
+                ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
+
+                url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
             }
             options = options || {};
             var id = this.generateRandomId(20);
