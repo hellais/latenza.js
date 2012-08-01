@@ -1,14 +1,19 @@
-# Latenz.js
 
-Latenz.js is a boilerplate for building web applications that
-use a high latency network and are driven by a RESTful backend.
+# Why?
+Latenza.js based websites are basically a series of JSON objects that contain
+markdown.
+This is because HTML has outgrown its original goals and has become to contain
+much more than merely markup. For this reason with Latenza.js we plan to bring
+back this separation between the content served by the server and the code
+being executed on the machine.
 
-For the benefits of writing web applications these ways see my
-article on how to improve javascript cryptography
-(http://hellais.wordpress.com/2011/12/27/how-to-improve-javascript-cryptography/).
+### On web app to rule them all
+For every latenza based website there is only one web application, this means
+that the web app served from www.example.com (or statically loaded in the
+users browser) can be used to access the content stored on foobar.com.
 
-Modern browsers are used to dealing with a fast web and implement very tight
-timeouts to improve performance.
+# Previous work
+For some more reasons on why this is a good idea: http://hellais.wordpress.com/2011/12/27/how-to-improve-javascript-cryptography/.
 
 This work is mainly based off of
 https://github.com/volojs/create-responsive-template.
@@ -18,9 +23,10 @@ https://github.com/volojs/create-responsive-template.
 * Require.js: http://requirejs.org/
 * JQuery: http://code.jquery.com/
 * Bootstrap: http://twitter.github.com/bootstrap/
-* Backbone: http://backbonejs.org/
-* Underscore: http://underscorejs.org/
-* Almond.js: https://github.com/jrburke/almond
+* Hogan: https://github.com/twitter/hogan.js
+* Signals: https://github.com/millermedeiros/js-signals
+* Crossroads: https://github.com/millermedeiros/crossroads.js
+* Marked: https://github.com/chjj/marked
 
 ## What it provides
 
