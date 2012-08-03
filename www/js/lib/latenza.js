@@ -128,7 +128,7 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
         // `testUrls` Array(), contains the addresses of the images to be used
         //                     for testing latency.
         getLatency: function(callback, measurements_count, testUrls) {
-            console.log("foobar");
+            // console.log("foobar");
             if(typeof(measurements_count) == 'undefined') measurements_count = 2;
             if(typeof(testUrls) == 'undefined') testUrls = ['https://www.google.it/favicon.ico',
                                                             'http://twitter.com/favicon.ico',

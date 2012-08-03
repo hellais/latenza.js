@@ -22,7 +22,6 @@ class LatenzaHandler(cyclone.web.RequestHandler):
                              'value': 'foobar'},
                              markdown2]
                    }
-        print "FOOBAR!"
         self.write(json.dumps(homeDict))
 
 def main():

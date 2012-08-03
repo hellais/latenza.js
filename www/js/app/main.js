@@ -5,6 +5,7 @@ define(function (require) {
 
     var $ = require('jquery');
     var latenza = require('latenza');
+    var pages = require('latenza/pages');
 
     // Dependencies that do not have an export of their own, just attach
     // to other objects, like jQuery. These are just used in the example
@@ -20,5 +21,19 @@ define(function (require) {
         require('./uiNetwork')();
         require('./uiAppCache')();
         require('./uiWebAppInstall')();
+
+        require(['latenza/pages'], function(pages) {
+            latenza.ajax({url: "/latenza"}).done(function(data){
+                var website = JSON.parse(data);
+                pages.menu(website.menu, '.menuElement');
+                pages.content(website.content, '.contentElement');
+            });
+        });
+
+        //var menuHandler = new pages.menu('.menuElement');
+        //var contentHandler = new pages.content('.contentElement');
+        //var siteHandler = new pages.site();
+
+
     });
 });
