@@ -5,6 +5,10 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
 
     latenza = {
 
+        ///////////////////////////////////
+        // Debug testing functions
+        ///////////////////////////////////
+
         test: function(idx) {
               if (idx == 1) {
                   this.ajax('http://google.com/'+Math.random());
@@ -20,17 +24,38 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
                   }
               }
         },
-        latency: 'inf',
 
-        registerEvents: function() {
-            var evt = document.createEvent('Event');
-            evt.initEvent('latency', true, true);
+        ///////////////////////////////////
+        // Utility functions
+        ///////////////////////////////////
+
+        generateRandomId: function(length, charset) {
+            if (typeof(charset) == 'undefined') charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+
+            var randomArray = new Uint32Array(Math.ceil(length/4)),
+                i;
+            if (window.crypto && window.crypto.getRandomValues) {
+                window.crypto.getRandomValues(randomArray);
+            } else {
+                for (i in randomArray) {
+                    randomArray[i] = Math.random() * Math.pow(2, 32);
+                }
+            }
+            var randomId = "";
+            for (i=0;i < randomArray.length;i++) {
+                for (var j = 0;j<4;j++) {
+                   if (randomId.length == length)
+                       return randomId;
+                   var randomByte = (randomArray[i] >> 8*j) & 0xFF;
+                   randomId += charset[randomByte % charset.length];
+                }
+            }
+            return randomId;
         },
 
-        on: function(state, func) {
-            return window.addEventListener(state, func, false);
-        },
-
+        ///////////////////////////////////
+        // Latenza based web site loading functions
+        ///////////////////////////////////
 
         setMenu: function(menu) {
             var menu = '';
@@ -83,6 +108,15 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
                       });
         },
 
+
+        ///////////////////////////////////
+        // Networking related utilities.
+        ///////////////////////////////////
+        // getLatency: calculates the current network latency.
+        //
+
+        latency: 'inf',
+
         //
         // This function returns the latency of the network connection by
         // loading small images from remote hosts.
@@ -94,7 +128,7 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
         // `testUrls` Array(), contains the addresses of the images to be used
         //                     for testing latency.
         getLatency: function(callback, measurements_count, testUrls) {
-            console.log("foobar");
+            // console.log("foobar");
             if(typeof(measurements_count) == 'undefined') measurements_count = 2;
             if(typeof(testUrls) == 'undefined') testUrls = ['https://www.google.it/favicon.ico',
                                                             'http://twitter.com/favicon.ico',
@@ -144,29 +178,57 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
             measure(this);
         },
 
-        generateRandomId: function(length, charset) {
-            if (typeof(charset) == 'undefined') charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        ajax: function(url, options) {
+            // Hey, jQuery has defereds too! <3
+            var defer = $.Deferred();
 
-            var randomArray = new Uint32Array(Math.ceil(length/4)),
-                i;
-            if (window.crypto && window.crypto.getRandomValues) {
-                window.crypto.getRandomValues(randomArray);
-            } else {
-                for (i in randomArray) {
-                    randomArray[i] = Math.random() * Math.pow(2, 32);
+            // Bits of code taken from jQuery.
+            if ( typeof url === "object" ) {
+                options = url;
+                url = null;
+                var s = jQuery.ajaxSetup({}, options),
+                    rhash = /#.*$/,
+                    rprotocol = /^\/\//,
+                    rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/,
+                    ajaxLocParts,
+                    ajaxLocation;
+
+                try {
+                    ajaxLocation = location.href;
+                } catch( e ) {
+                    // Use the href attribute of an A element
+                    // since IE will modify it given document.location
+                    ajaxLocation = document.createElement( "a" );
+                    ajaxLocation.href = "";
+                    ajaxLocation = ajaxLocation.href;
                 }
+
+                ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
+
+                url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
             }
-            var randomId = "";
-            for (i=0;i < randomArray.length;i++) {
-                for (var j = 0;j<4;j++) {
-                   if (randomId.length == length)
-                       return randomId;
-                   var randomByte = (randomArray[i] >> 8*j) & 0xFF;
-                   randomId += charset[randomByte % charset.length];
-                }
-            }
-            return randomId;
+            options = options || {};
+            var id = this.generateRandomId(20);
+            this._addRequestToBox(url, id);
+            defer.progress(this._updateRequestBox);
+            defer.done(this._requestCompleted);
+            defer.fail(this._requestCompleted);
+
+            var request = $.ajax(url, options);
+            request.done(function() {
+                            console.log("success");
+                            defer.resolve(id, 'success');
+                        });
+            request.fail(function() {
+                            console.log("failure");
+                            defer.reject(id, 'fail');
+                        });
+            return request;
         },
+
+        ///////////////////////////////////
+        // UI Related functions
+        ///////////////////////////////////
 
         _addRequestToBox: function(url, id) {
             var template = '<dt class="{{id}}">{{url}}</dt>';
@@ -221,57 +283,29 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
             });
         },
 
-        ajax: function(url, options) {
-            // Hey, jQuery has defereds too! <3
-            var defer = $.Deferred();
 
-            // Bits of code taken from jQuery.
-            if ( typeof url === "object" ) {
-                options = url;
-                url = null;
-                var s = jQuery.ajaxSetup({}, options),
-                    rhash = /#.*$/,
-                    rprotocol = /^\/\//,
-                    rurl = /^([\w\+\.\-]+:)(?:\/\/([^\/?#:]*)(?::(\d+))?)?/,
-                    ajaxLocParts,
-                    ajaxLocation;
-
-                try {
-                    ajaxLocation = location.href;
-                } catch( e ) {
-                    // Use the href attribute of an A element
-                    // since IE will modify it given document.location
-                    ajaxLocation = document.createElement( "a" );
-                    ajaxLocation.href = "";
-                    ajaxLocation = ajaxLocation.href;
-                }
-
-                ajaxLocParts = rurl.exec( ajaxLocation.toLowerCase() ) || [];
-
-                url = ( ( url || s.url ) + "" ).replace( rhash, "" ).replace( rprotocol, ajaxLocParts[ 1 ] + "//" );
-            }
-            options = options || {};
-            var id = this.generateRandomId(20);
-            this._addRequestToBox(url, id);
-            defer.progress(this._updateRequestBox);
-            defer.done(this._requestCompleted);
-            defer.fail(this._requestCompleted);
-
-            var request = $.ajax(url, options);
-            request.done(function() {
-                            console.log("success");
-                            defer.resolve(id, 'success');
-                        });
-            request.fail(function() {
-                            console.log("failure");
-                            defer.reject(id, 'fail');
-                        });
-            return request;
-        },
-
+        ///////////////////////////////////
+        // Privacy related functions
+        ///////////////////////////////////
         isAnonymous: function() {
             return false;
         },
+
+        ///////////////////////////////////
+        // Security related functions
+        ///////////////////////////////////
+
+
+        ///////////////////////////////////
+        //
+        ///////////////////////////////////
+
+
+        ///////////////////////////////////
+        //
+        ///////////////////////////////////
+
+
 
     };
     return latenza;

@@ -19,10 +19,9 @@ class LatenzaHandler(cyclone.web.RequestHandler):
                               'barfoo': '/latenza/barfoo'},
                     'submenu': {'foo': '/latenza/foo'},
                     'home': [markdown1, {'type': 'fileupload',
-                    'value': 'foobar'},
+                             'value': 'foobar'},
                              markdown2]
                    }
-        print "FOOBAR!"
         self.write(json.dumps(homeDict))
 
 def main():
