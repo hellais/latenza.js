@@ -78,7 +78,7 @@ define('latenza', ['jquery', 'hogan', 'crossroads', 'marked'], function($, hogan
             var successCb = (function(ltz) {
                                 return function(data){ltz.readLatenza(data);};
                             });
-            this.ajax({url: url+'/latenza/',
+            this.ajax({url: url+'latenza/',
                        success: successCb(this),
                       });
         },

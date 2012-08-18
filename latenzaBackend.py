@@ -29,7 +29,7 @@ def main():
     log.startLogging(sys.stdout)
     application = cyclone.web.Application([
         (r"/latenza/", LatenzaHandler),
-        (r"/static/(.*)", cyclone.web.StaticFileHandler, {'path': '/Users/y/Documents/code/web/latenza/www/'}),
+        (r"/static/(.*)", cyclone.web.StaticFileHandler, {'path': 'www/'}),
     ])
 
     reactor.listenTCP(8888, application, interface="127.0.0.1")

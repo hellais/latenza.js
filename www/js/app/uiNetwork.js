@@ -60,5 +60,7 @@ define(function (require) {
             $(this).delay(800).fadeTo("slow", '0.4');
         });
 
+        latenza.openSite('/');
+
     };
 });
