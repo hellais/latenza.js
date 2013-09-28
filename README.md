@@ -1,5 +1,5 @@
-
 # Why?
+
 Latenza.js based websites are basically a series of JSON objects that contain
 markdown.
 This is because HTML has outgrown its original goals and has become to contain
@@ -76,6 +76,3 @@ http://backbonetutorials.com/organizing-backbone-using-modules/
 https://github.com/jcreamer898/RequireJS-Backbone-Starter
 
 https://github.com/volojs/volo/wiki/Design-Goals
-
-
-
