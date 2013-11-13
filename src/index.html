@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="shortcut icon" href="../../assets/ico/favicon.png">
+
+<title>Latenza.js</title>
+
+<!-- build:css styles.css -->
+<link rel="stylesheet" href="libs/normalize-css/normalize.css"/>
+
+<link rel="stylesheet" href="css/main.css"/>
+
+<!-- endbuild -->
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+        <script src="../../assets/js/html5shiv.js"></script>
+        <script src="../../assets/js/respond.min.js"></script>
+      <![endif]-->
+
+</head>
+<body ng-app="latenza" ng-controller="MainCtrl">
+
+
+<!-- 
+
+<div class="base03">xxx</div>
+<div class="base02">xxx</div>
+<div class="base01">xxx</div>
+<div class="base00">xxx</div>
+<div class="base0">xxx</div>
+<div class="base1">xxx</div>
+<div class="base2">xxx</div>
+<div class="base3">xxx</div>
+
+-->
+
+
+<!-- Fixed navbar -->
+<div class="navbar navbar-fixed-top base02">
+  <div class="navbar-header">
+    <a class="navbar-brand" href="#">{{root.title}}</a>
+  </div>
+  <div class="navbar-collapse collapse">
+    <ul class="nav navbar-nav">
+      <li ng-repeat="page in root.md">
+        <a ng-click="fetchPage(page.id)">{{page.title}}</a>
+      </li>
+    </ul>
+  </div><!--/.nav-collapse -->
+</div>
+
+<div class="panel panel-default latenza">
+  <div class="panel-heading">
+    <h3 class="panel-title">Network</h3>
+  </div>
+  <div class="panel-body">
+    {{network.latency}} ms
+    <span class="label label-success">{{network.successfulRequests}}</span>
+    <span class="label label-danger">{{network.failedRequests}}</span>
+  </div>
+  <div ng-repeat="request in pendingRequests">
+    <div class="progress">
+      <div class="progress-bar" latency-bar="network" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+        <span class="sr-only">60% Complete</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="open-page" markdown="openPage">
+  </div>
+
+</div> <!-- /container -->
+
+<!-- build:js scripts.js -->
+<script src="libs/jquery/jquery.js"></script>
+<script src="libs/marked/lib/marked.js"></script>
+
+<script src="libs/angular/angular.js"></script>
+<script src="libs/angular-route/angular-route.js"></script>
+<script src="libs/angular-resource/angular-resource.js"></script>
+
+<script src="js/services.js"></script>
+<script src="js/directives.js"></script>
+<script src="js/controllers.js"></script>
+<script src="js/filters.js"></script>
+
+<script src="js/app.js"></script>
+
+<!-- endbuild -->
+
+</body>
+</html>
