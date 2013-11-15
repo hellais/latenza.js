@@ -10,7 +10,12 @@
 <title>Latenza.js</title>
 
 <!-- build:css styles.css -->
+
+<!-- libraries -->
 <link rel="stylesheet" href="libs/normalize-css/normalize.css"/>
+<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap.css"/>
+<link rel="stylesheet" href="libs/bootstrap/dist/css/bootstrap-theme.css"/>
+<!-- endlibs -->
 
 <link rel="stylesheet" href="css/main.css"/>
 
@@ -48,7 +53,7 @@
   <div class="navbar-collapse collapse">
     <ul class="nav navbar-nav">
       <li ng-repeat="page in root.md">
-        <a ng-click="fetchPage(page.id)">{{page.title}}</a>
+        <a ng-click="fetchPage(page)">{{page.title}}</a>
       </li>
     </ul>
   </div><!--/.nav-collapse -->
@@ -82,6 +87,7 @@
 <!-- build:js scripts.js -->
 <script src="libs/jquery/jquery.js"></script>
 <script src="libs/marked/lib/marked.js"></script>
+<script src="libs/bootstrap/dist/js/bootstrap.js"></script>
 
 <script src="libs/angular/angular.js"></script>
 <script src="libs/angular-route/angular-route.js"></script>

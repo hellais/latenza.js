@@ -6,39 +6,10 @@ body {
 
 .latenza {
   position: absolute;
-  right: 100px;
+  right: 150px;
   top: 20px;
   z-index: 9999;
-}
-
-.navbar {
-  position: relative;
-  min-height: 50px;
-  margin-bottom: 30px;
-  border: 1px solid transparent;
-}
-
-.navbar-nav {
-  float: left;
-  margin: 0;
-}
-
-.navbar-nav > li {
-  float: left;
-  margin-left: 20px;
-}
-
-.navbar-fixed-top,
-.navbar-fixed-bottom {
-  position: fixed;
-  right: 0;
-  left: 0;
-  z-index: 999;
-}
-
-.nav > li {
-  position: relative;
-  display: block;
+  width: 300px;
 }
 
 .open-page {

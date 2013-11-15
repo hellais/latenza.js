@@ -15,7 +15,24 @@ module.exports = function(grunt) {
       ],
       tasks: ['build', 'reload', 'connect']
     },
-    
+
+    minify: {
+      dynamic_mappings: {
+        // Grunt will search for "**/*.js" under "lib/" when the "minify" task
+        // runs and build the appropriate src-dest file mappings then, so you
+        // don't need to update the Gruntfile when files are added or removed.
+        files: [
+          {
+            expand: true,     // Enable dynamic expansion.
+            cwd: 'src/libs/',      // Src matches are relative to this path.
+            src: ['**/*.js'], // Actual pattern(s) to match.
+            dest: 'build/',   // Destination path prefix.
+            ext: '.min.js',   // Dest filepaths will have this extension.
+          },
+        ],
+      },
+    },
+
     connect: {
       server: {
         options: {
@@ -55,8 +72,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-connect');
+
+  grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
   
   // Default task(s).
-  grunt.registerTask('build', ['uglify', 'sass']);
+  grunt.registerTask('build', ['concat', 'cssmin', 'uglify', 'sass']);
 
 };

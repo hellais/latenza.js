@@ -4,15 +4,18 @@
   "md": [
     {
         "id": "about",
-        "title": "about"
+        "title": "about",
+        "href": "md/about.md"
     },
     {
         "id": "contact",
-        "title": "contact"
+        "title": "contact",
+        "href": "md/contact.md"
     },
     {
         "id": "social",
-        "title": "social"
+        "title": "social",
+        "href": "md/social.md"
     }
   ]
 }

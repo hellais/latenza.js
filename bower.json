@@ -22,5 +22,6 @@
     "angular-route": "1.2.0-rc.2",
     "angular-resource": "1.2.0-rc.2",
     "marked": "~0.2.9",
+    "bootstrap": "~3.0.0"
     }
 }

@@ -7,8 +7,8 @@
 angular.module('latenza.services', []).
   value('version', '2.0.0').
   factory('Page', ['$http', function($http) {
-    return function(page_id, cb) {
-      $http.get('/md/' + page_id + '.md').
+    return function(page, cb) {
+      $http.get(page.href).
         success(function(data, status, headers, config) {
           var page = marked(data);
           cb(page);

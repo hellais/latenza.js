@@ -9,9 +9,9 @@ angular.module('latenza.controllers', []).
       $scope.root = root; 
     });
 
-    $scope.fetchPage = function(page_id) {
-      Page(page_id, function(page){
-        $scope.openPage = page;
+    $scope.fetchPage = function(page) {
+      Page(page, function(page_content){
+        $scope.openPage = page_content;
       });
     };
 
