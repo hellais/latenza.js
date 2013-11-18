@@ -46,18 +46,20 @@
 
 
 <!-- Fixed navbar -->
-<div class="navbar navbar-fixed-top base02">
-  <div class="navbar-header">
-    <a class="navbar-brand" href="#">{{root.title}}</a>
-  </div>
-  <div class="navbar-collapse collapse">
-    <ul class="nav navbar-nav">
-      <li ng-repeat="page in root.md">
-        <a ng-click="fetchPage(page)">{{page.title}}</a>
-      </li>
-    </ul>
-  </div><!--/.nav-collapse -->
-</div>
+<nav class="navbar navbar-default" role="navigation">
+
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">{{root.title}}</a>
+    </div>
+    <div class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li ng-repeat="page in root.md" ng-class="{'active': currentPage.id == page.id}">
+          <a ng-click="openPage(page)">{{page.title}}</a>
+        </li>
+      </ul>
+    </div><!--/.nav-collapse -->
+
+</nav>
 
 <div class="panel panel-default latenza">
   <div class="panel-heading">
@@ -79,7 +81,7 @@
 
 <div class="container">
 
-  <div class="open-page" markdown="openPage">
+  <div class="open-page" markdown="currentPageContent">
   </div>
 
 </div> <!-- /container -->

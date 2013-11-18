@@ -29,8 +29,10 @@ angular.module('latenza.directives', []).
       restrict: 'AE',
       link: function (scope, element, attrs) {
         if (attrs.latencyBar) {
-          console.log($(element));
-          $(element).animate({"width": "100%"}, attrs.latencyBar.latency/1000);
+          $(element).animate(
+            {"width": "100%"},
+            attrs.latencyBar.latency/1000
+          );
         }
       }
     };
