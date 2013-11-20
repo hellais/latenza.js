@@ -2,46 +2,44 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    watch: {
-      files: [
-        'src/*.html',
-        'src/src/**/*.scss',
-        'src/src/**/*.css',
-        'src/js/**/*.js',
-        'src/templates/**/*.html',
-        'src/img/**/*',
-        'src/fonts/*',
-      ],
-      tasks: ['build', 'reload', 'connect']
+
+    clean: {
+      release: ['tmp']
     },
 
-    minify: {
-      dynamic_mappings: {
-        // Grunt will search for "**/*.js" under "lib/" when the "minify" task
-        // runs and build the appropriate src-dest file mappings then, so you
-        // don't need to update the Gruntfile when files are added or removed.
-        files: [
-          {
-            expand: true,     // Enable dynamic expansion.
-            cwd: 'src/libs/',      // Src matches are relative to this path.
-            src: ['**/*.js'], // Actual pattern(s) to match.
-            dest: 'build/',   // Destination path prefix.
-            ext: '.min.js',   // Dest filepaths will have this extension.
-          },
-        ],
-      },
-    },
-
-    connect: {
-      server: {
-        options: {
-          port: 9001,
-          base: 'src',
-          keepalive: true
+    copy: {
+        release: {
+            files: [{
+                dest: 'tmp/', cwd: 'src/', src: ['**'], expand: true
+            }]
         }
+    },
+
+    // usemin handler should point to the file containing
+    // the usemin blocks to be parsed
+    'useminPrepare': {
+      html: 'tmp/index.html'
+    },
+
+    // update references in HTML/CSS to revved files
+    usemin: {
+      html: [
+             'tmp/index.html',
+            ],
+      css: [
+        'tmp/**/**.css',
+      ],
+      options: {
+        dirs: ['tmp']
       }
     },
+
+    // HTML minification
+    html: {
+      files: ['**/*.html']
+    },
+
+    pkg: grunt.file.readJSON('package.json'),
 
     reload: {
         port: 6001,
@@ -51,34 +49,46 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: 'src/js/*.js',
+        src: 'tmp/js/*.js',
         dest: 'build/<%= pkg.name %>.min.js'
       }
     },
-    sass: {                              // Task
-      dist: {                            // Target
-        options: {                       // Target options
-          style: 'expanded'
-        },
-        files: {                         // Dictionary of files
-          'src/css/main.css': 'src/scss/main.scss',       // 'destination': 'source'
-        }
-      }
-    },
+  });
+
+  grunt.registerTask('cleanupWorkingDirectory', function() {
+
+    grunt.file.mkdir('build');
+    grunt.file.mkdir('build/img');
+    grunt.file.mkdir('build/fonts');
+
+    grunt.file.copy('tmp/styles.css', 'build/styles.css');
+    grunt.file.copy('tmp/scripts.js', 'build/scripts.js');
+    grunt.file.copy('tmp/index.html', 'build/index.html');
+
+    grunt.file.recurse('tmp/img', function(absdir, rootdir, subdir, filename) {
+        grunt.file.copy(absdir, path.join('build/img', subdir || '', filename || ''));
+    });
+
+    grunt.file.recurse('tmp/fonts', function(absdir, rootdir, subdir, filename) {
+        grunt.file.copy(absdir, path.join('build/fonts', subdir || '', filename || ''));
+    });
+
   });
 
   grunt.loadNpmTasks('grunt-reload');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-uglify');
-  grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-connect');
 
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   
   // Default task(s).
-  grunt.registerTask('build', ['concat', 'cssmin', 'uglify', 'sass']);
+  grunt.registerTask('build', ['copy', 'useminPrepare', 'concat', 'cssmin',
+                     'uglify', 'usemin', 'cleanupWorkingDirectory']);
 
 };
